@@ -314,9 +314,9 @@ public extension Property {
         }
         
         var address = CMIOObjectPropertyAddress(selector, scope, element)
-        var dataSize: UInt32 = UInt32(MemoryLayout<T>.size)
+        let dataSize: UInt32 = UInt32(MemoryLayout<T>.size)
         var dataUsed: UInt32 = 0
-        var data = UnsafeMutableRawPointer.allocate(byteCount: Int(dataSize), alignment: MemoryLayout<T>.alignment)
+        let data = UnsafeMutableRawPointer.allocate(byteCount: Int(dataSize), alignment: MemoryLayout<T>.alignment)
         defer { data.deallocate() }
         
         let status = CMIOObjectGetPropertyData(objectID, &address,
@@ -351,7 +351,7 @@ public extension Property {
         
         let count = Int(dataSize) / MemoryLayout<T>.size
         var dataUsed: UInt32 = 0
-        var data = UnsafeMutableRawPointer.allocate(byteCount: Int(dataSize), alignment: MemoryLayout<T>.alignment)
+        let data = UnsafeMutableRawPointer.allocate(byteCount: Int(dataSize), alignment: MemoryLayout<T>.alignment)
         defer { data.deallocate() }
         
         status = CMIOObjectGetPropertyData(objectID, &address,
@@ -550,9 +550,9 @@ public extension Property {
         }
         
         var address = CMIOObjectPropertyAddress(selector, scope, element)
-        var dataSize: UInt32 = UInt32(MemoryLayout<T>.size)
+        let dataSize: UInt32 = UInt32(MemoryLayout<T>.size)
         var dataUsed: UInt32 = 0
-        var data = UnsafeMutableRawPointer.allocate(byteCount: Int(dataSize), alignment: MemoryLayout<T>.alignment)
+        let data = UnsafeMutableRawPointer.allocate(byteCount: Int(dataSize), alignment: MemoryLayout<T>.alignment)
         defer { data.deallocate() }
         let typedData = data.bindMemory(to: T.self, capacity: 1)
         typedData.pointee = value
