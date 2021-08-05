@@ -518,11 +518,15 @@ public extension Property {
         }
         
         var address = CMIOObjectPropertyAddress(selector, scope, element)
-        var value = value
-        var translatedValue = UnsafeMutablePointer<U>.allocate(capacity: 1)
-        defer { translatedValue.deallocate() }
+        let sourceValue = UnsafeMutablePointer<T>.allocate(capacity: 1)
+        sourceValue.initialize(to: value)
+        let translatedValue = UnsafeMutablePointer<U>.allocate(capacity: 1)
+        defer {
+            sourceValue.deallocate()
+            translatedValue.deallocate()
+        }
         
-        var translation = AudioValueTranslation(mInputData: &value,
+        var translation = AudioValueTranslation(mInputData: sourceValue,
                                                 mInputDataSize: UInt32(MemoryLayout<T>.size),
                                                 mOutputData: translatedValue,
                                                 mOutputDataSize: UInt32(MemoryLayout<U>.size))
