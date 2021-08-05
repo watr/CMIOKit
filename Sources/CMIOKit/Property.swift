@@ -314,9 +314,9 @@ public extension Property {
         }
         
         var address = CMIOObjectPropertyAddress(selector, scope, element)
-        var dataSize: UInt32 = UInt32(MemoryLayout<T>.size)
+        let dataSize: UInt32 = UInt32(MemoryLayout<T>.size)
         var dataUsed: UInt32 = 0
-        var data = UnsafeMutableRawPointer.allocate(byteCount: Int(dataSize), alignment: MemoryLayout<T>.alignment)
+        let data = UnsafeMutableRawPointer.allocate(byteCount: Int(dataSize), alignment: MemoryLayout<T>.alignment)
         defer { data.deallocate() }
         
         let status = CMIOObjectGetPropertyData(objectID, &address,
@@ -351,7 +351,7 @@ public extension Property {
         
         let count = Int(dataSize) / MemoryLayout<T>.size
         var dataUsed: UInt32 = 0
-        var data = UnsafeMutableRawPointer.allocate(byteCount: Int(dataSize), alignment: MemoryLayout<T>.alignment)
+        let data = UnsafeMutableRawPointer.allocate(byteCount: Int(dataSize), alignment: MemoryLayout<T>.alignment)
         defer { data.deallocate() }
         
         status = CMIOObjectGetPropertyData(objectID, &address,
@@ -518,11 +518,15 @@ public extension Property {
         }
         
         var address = CMIOObjectPropertyAddress(selector, scope, element)
-        var value = value
-        var translatedValue = UnsafeMutablePointer<U>.allocate(capacity: 1)
-        defer { translatedValue.deallocate() }
+        let sourceValue = UnsafeMutablePointer<T>.allocate(capacity: 1)
+        sourceValue.initialize(to: value)
+        let translatedValue = UnsafeMutablePointer<U>.allocate(capacity: 1)
+        defer {
+            sourceValue.deallocate()
+            translatedValue.deallocate()
+        }
         
-        var translation = AudioValueTranslation(mInputData: &value,
+        var translation = AudioValueTranslation(mInputData: sourceValue,
                                                 mInputDataSize: UInt32(MemoryLayout<T>.size),
                                                 mOutputData: translatedValue,
                                                 mOutputDataSize: UInt32(MemoryLayout<U>.size))
@@ -550,9 +554,9 @@ public extension Property {
         }
         
         var address = CMIOObjectPropertyAddress(selector, scope, element)
-        var dataSize: UInt32 = UInt32(MemoryLayout<T>.size)
+        let dataSize: UInt32 = UInt32(MemoryLayout<T>.size)
         var dataUsed: UInt32 = 0
-        var data = UnsafeMutableRawPointer.allocate(byteCount: Int(dataSize), alignment: MemoryLayout<T>.alignment)
+        let data = UnsafeMutableRawPointer.allocate(byteCount: Int(dataSize), alignment: MemoryLayout<T>.alignment)
         defer { data.deallocate() }
         let typedData = data.bindMemory(to: T.self, capacity: 1)
         typedData.pointee = value
